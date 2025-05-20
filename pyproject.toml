@@ -22,7 +22,6 @@ classifiers = [
 ]
 urls = { github = "https://github.com/vanandrew/brainextractor" }
 version = "0.2.2"
-dynamic = ["scripts"]
 dependencies = [
     "numba >= 0.51.2",
     "nibabel >= 3.2.1",
@@ -47,3 +46,7 @@ zip-safe = true
 [tool.black]
 line-length = 120
 target-version = ["py37", "py38", "py39", "py310"]
+
+[project.scripts]
+brainextractor = "brainextractor.scripts.brainextractor:main"
+brainextractor_render = "brainextractor.scripts.brainextractor_render:main"
