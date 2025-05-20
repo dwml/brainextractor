@@ -4,10 +4,11 @@
 import os
 import warnings
 import numpy as np
-import nibabel as nib
 import trimesh
+import SimpleITK as sitk
+from typing import Optional
 from numba import jit
-from numba.typed import List
+import numba.typed
 from .helpers import sphere, closest_integer_point, bresenham3d, l2norm, l2normarray, diagonal_dot
 
 
@@ -21,7 +22,7 @@ class BrainExtractor:
 
     def __init__(
         self,
-        img: nib.Nifti1Image,
+        img: sitk.Image,
         t02t: float = 0.02,
         t98t: float = 0.98,
         bt: float = 0.5,
@@ -39,8 +40,8 @@ class BrainExtractor:
         print("Initializing...")
 
         # get image resolution
-        res = img.header["pixdim"][1]
-        if not np.allclose(res, img.header["pixdim"][1:4], rtol=1e-3):
+        res = img.GetSpacing()
+        if not np.allclose(res[0], res[1:], rtol=1e-3):
             warnings.warn(
                 "The voxels in this image are non-isotropic! \
                 Brain extraction settings may not be valid!"
@@ -49,10 +50,10 @@ class BrainExtractor:
         # store brain extraction parameters
         print("Parameters: bt=%f, d1=%f, d2=%f, rmin=%f, rmax=%f" % (bt, d1, d2, rmin, rmax))
         self.bt = bt
-        self.d1 = d1 / res
-        self.d2 = d2 / res
-        self.rmin = rmin / res
-        self.rmax = rmax / res
+        self.d1 = d1
+        self.d2 = d2
+        self.rmin = rmin
+        self.rmax = rmax
 
         # compute E, F constants
         self.E = (1.0 / rmin + 1.0 / rmax) / 2.0
@@ -62,10 +63,10 @@ class BrainExtractor:
         self.img = img
 
         # store conveinent references
-        self.data = img.get_fdata()  # 3D data
-        self.rdata = img.get_fdata().ravel()  # flattened data
-        self.shape = img.shape  # 3D shape
-        self.rshape = np.multiply.reduce(img.shape)  # flattened shape
+        self.data = sitk.GetArrayFromImage(img)  # 3D data
+        self.rdata = self.data.ravel()  # flattened data
+        self.shape = self.data.shape  # 3D shape
+        self.rshape = np.multiply.reduce(self.shape)  # flattened shape
 
         # get thresholds from histogram
         sorted_data = np.sort(self.rdata)
@@ -81,10 +82,10 @@ class BrainExtractor:
             np.arange(self.shape[0]), np.arange(self.shape[1]), np.arange(self.shape[2]), indexing="ij", copy=False
         )
         cdata = np.clip(self.rdata, self.t2, self.t98) * (self.rdata > self.t)
-        ci = np.average(ic.ravel(), weights=cdata)
-        cj = np.average(jc.ravel(), weights=cdata)
-        ck = np.average(kc.ravel(), weights=cdata)
-        self.c = np.array([ci, cj, ck])
+        ci = float(np.average(ic.ravel(), weights=cdata))
+        cj = float(np.average(jc.ravel(), weights=cdata))
+        ck = float(np.average(kc.ravel(), weights=cdata))
+        self.c = (ci, cj, ck)
         print("Center-of-Mass: {}".format(self.c))
 
         # compute 1/2 head radius with spherical formula
@@ -105,7 +106,7 @@ class BrainExtractor:
         self.num_faces = self.surface.faces.shape[0]
         self.vertices = np.array(self.surface.vertices)
         self.faces = np.array(self.surface.faces)
-        self.vertex_neighbors_idx = List([np.array(i) for i in self.surface.vertex_neighbors])
+        self.vertex_neighbors_idx = numba.typed.List([np.array(i) for i in self.surface.vertex_neighbors])
         # compute location of vertices in face array
         self.face_vertex_idxs = np.zeros((self.num_vertices, 6, 2), dtype=np.int64)
         for v in range(self.num_vertices):
@@ -249,7 +250,7 @@ class BrainExtractor:
             mivd[v] = np.mean(vd)
         return np.mean(mivd)
 
-    def run(self, iterations: int = 1000, deformation_path: str = None):
+    def run(self, iterations: int = 1000, deformation_path: Optional[str] = None):
         """
         Runs the extraction step.
 
@@ -473,8 +474,10 @@ class BrainExtractor:
         """
         Saves brain extraction to nifti file
         """
-        mask = self.compute_mask()
-        nib.Nifti1Image(mask, self.img.affine).to_filename(filename)
+        mask = sitk.GetImageFromArray(self.compute_mask())
+        mask.CopyInformation(self.img)
+        sitk.WriteImage(mask, filename)
+
 
     def save_surface(self, filename: str):
         """

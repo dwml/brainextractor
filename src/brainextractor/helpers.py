@@ -1,12 +1,12 @@
 """
     Helper functions
 """
+from typing import Sequence
 import numpy as np
-import trimesh
 from numba import jit
 
 
-def sphere(shape: list, radius: float, position: list):
+def sphere(shape: Sequence[int], radius: float, position: Sequence[float]):
     """
     Creates a binary sphere
     """
@@ -18,11 +18,11 @@ def sphere(shape: list, radius: float, position: list):
     # genereate the grid for the support points
     # centered at the position indicated by position
     grid = [slice(-x0, dim - x0) for x0, dim in zip(position, shape)]
-    position = np.ogrid[grid]
+    position_grid = np.ogrid[grid]
     # calculate the distance of all points from `position` center
     # scaled by the radius
     arr = np.zeros(shape, dtype=float)
-    for x_i, semisize in zip(position, semisizes):
+    for x_i, semisize in zip(position_grid, semisizes):
         # this can be generalized for exponent != 2
         # in which case `(x_i / semisize)`
         # would become `np.abs(x_i / semisize)`

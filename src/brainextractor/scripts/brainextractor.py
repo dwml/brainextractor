@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import os
+from pathlib import Path
 import argparse
-import nibabel as nib
+import SimpleITK as sitk
 from brainextractor.main import BrainExtractor
 
 
@@ -14,7 +15,7 @@ def main():
     )
     parser.add_argument("input_img", help="Input image to brain extract")
     parser.add_argument("output_img", help="Output image to write out")
-    parser.add_argument("-w", "--write_surface_deform", help="Path to write out surface files at each deformation step")
+    parser.add_argument("-w", "--write_surface_deform", help="Path to write out surface files at each deformation step", type=Path, default=None, required=False)
     parser.add_argument(
         "-f",
         "--fractional_threshold",
@@ -55,7 +56,7 @@ def main():
 
     # load input image
     input_img = os.path.abspath(args.input_img)
-    img = nib.load(input_img)
+    img = sitk.ReadImage(input_img)
 
     # create brain extractor
     bet = BrainExtractor(
@@ -70,13 +71,10 @@ def main():
     )
 
     # create output path for surface files if defined
-    if args.write_surface_deform:
-        deformation_path = os.path.abspath(args.write_surface_deform)
-        try:
-            os.remove(deformation_path)
-        except FileNotFoundError:
-            pass
-        os.makedirs(os.path.dirname(deformation_path), exist_ok=True)
+    deformation_path = args.write_surface_deform
+    if deformation_path:
+        if not deformation_path.parent.exists():
+            deformation_path.mkdir(parents=True, exist_ok=True)
 
     # run brain extractor
     bet.run(iterations=args.iterations, deformation_path=deformation_path if args.write_surface_deform else None)

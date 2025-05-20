@@ -142,9 +142,6 @@ name = "brainextractor"
 version = "0.2.2"
 source = { editable = "." }
 dependencies = [
-    { name = "nibabel", version = "4.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.8'" },
-    { name = "nibabel", version = "5.2.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
-    { name = "nibabel", version = "5.3.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
     { name = "numba", version = "0.56.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.8'" },
     { name = "numba", version = "0.58.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
     { name = "numba", version = "0.60.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.9.*'" },
@@ -158,6 +155,7 @@ dependencies = [
     { name = "scipy", version = "1.10.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
     { name = "scipy", version = "1.13.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.9.*'" },
     { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "simpleitk" },
     { name = "trimesh", version = "4.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.8'" },
     { name = "trimesh", version = "4.6.10", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.8'" },
 ]
@@ -172,11 +170,11 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=22.0" },
-    { name = "nibabel", specifier = ">=3.2.1" },
     { name = "numba", specifier = ">=0.51.2" },
     { name = "numpy", specifier = ">=1.19.4" },
     { name = "pyrender", specifier = ">=0.1.43" },
     { name = "scipy", specifier = ">=1.5.4" },
+    { name = "simpleitk", specifier = ">=2.5.0" },
     { name = "trimesh", specifier = ">=3.8.15" },
 ]
 provides-extras = ["dev"]
@@ -316,37 +314,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/cd/12/33e59336dca5be0c398a7482335911a33aa0e20776128f038019f1a95f1b/importlib_metadata-8.5.0.tar.gz", hash = "sha256:71522656f0abace1d072b9e5481a48f07c138e00f079c38c8f883823f9c26bd7", size = 55304, upload-time = "2024-09-11T14:56:08.937Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/d9/a1e041c5e7caa9a05c925f4bdbdfb7f006d1f74996af53467bc394c97be7/importlib_metadata-8.5.0-py3-none-any.whl", hash = "sha256:45e54197d28b7a7f1559e60b95e7c567032b602131fbd588f1497f47880aa68b", size = 26514, upload-time = "2024-09-11T14:56:07.019Z" },
-]
-
-[[package]]
-name = "importlib-resources"
-version = "6.4.5"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version == '3.8.*'",
-]
-dependencies = [
-    { name = "zipp", version = "3.20.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/98/be/f3e8c6081b684f176b761e6a2fef02a0be939740ed6f54109a2951d806f3/importlib_resources-6.4.5.tar.gz", hash = "sha256:980862a1d16c9e147a59603677fa2aa5fd82b87f223b6cb870695bcfce830065", size = 43372, upload-time = "2024-09-09T17:03:14.677Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/6a/4604f9ae2fa62ef47b9de2fa5ad599589d28c9fd1d335f32759813dfa91e/importlib_resources-6.4.5-py3-none-any.whl", hash = "sha256:ac29d5f956f01d5e4bb63102a5a19957f1b9175e45649977264a1416783bb717", size = 36115, upload-time = "2024-09-09T17:03:13.39Z" },
-]
-
-[[package]]
-name = "importlib-resources"
-version = "6.5.2"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.10'",
-    "python_full_version == '3.9.*'",
-]
-dependencies = [
-    { name = "zipp", version = "3.21.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.9.*'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/cf/8c/f834fbf984f691b4f7ff60f50b514cc3de5cc08abfc3295564dd89c5e2e7/importlib_resources-6.5.2.tar.gz", hash = "sha256:185f87adef5bcc288449d98fb4fba07cea78bc036455dd44c5fc4a2fe78fed2c", size = 44693, upload-time = "2025-01-03T18:51:56.698Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a4/ed/1f1afb2e9e7f38a545d628f864d562a5ae64fe6f7a10e28ffb9b185b4e89/importlib_resources-6.5.2-py3-none-any.whl", hash = "sha256:789cfdc3ed28c78b67a06acb8126751ced69a3d5f79c095a98298cd8a760ccec", size = 37461, upload-time = "2025-01-03T18:51:54.306Z" },
 ]
 
 [[package]]
@@ -555,60 +522,6 @@ resolution-markers = [
 sdist = { url = "https://files.pythonhosted.org/packages/fd/1d/06475e1cd5264c0b870ea2cc6fdb3e37177c1e565c43f56ff17a10e3937f/networkx-3.4.2.tar.gz", hash = "sha256:307c3669428c5362aab27c8a1260aa8f47c4e91d3891f48be0141738d8d053e1", size = 2151368, upload-time = "2024-10-21T12:39:38.695Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b9/54/dd730b32ea14ea797530a4479b2ed46a6fb250f682a9cfb997e968bf0261/networkx-3.4.2-py3-none-any.whl", hash = "sha256:df5d4365b724cf81b8c6a7312509d0c22386097011ad1abe274afd5e9d3bbc5f", size = 1723263, upload-time = "2024-10-21T12:39:36.247Z" },
-]
-
-[[package]]
-name = "nibabel"
-version = "4.0.2"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.8'",
-]
-dependencies = [
-    { name = "numpy", version = "1.21.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.8'" },
-    { name = "packaging", version = "24.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.8'" },
-    { name = "setuptools", marker = "python_full_version < '3.8'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/2c/a7/e51987b7a28ddd00d12927c3ba7322b85a958fdcf68ebfe0aa5268f4feee/nibabel-4.0.2.tar.gz", hash = "sha256:45c49b5349351b45f6c045a91aa02b4f0d367686ff3284632ef95ac65b930786", size = 4804200, upload-time = "2022-08-31T13:47:43.741Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/89/51/c97641cc2cd1b3b14cdec54b4e86fe03fc59753ecd13dc67544716fb7353/nibabel-4.0.2-py3-none-any.whl", hash = "sha256:c4fe76348aa865f8300beaaf2a69d31624964c861853ef80c06e33d5f244413c", size = 3345004, upload-time = "2022-08-31T13:47:41.022Z" },
-]
-
-[[package]]
-name = "nibabel"
-version = "5.2.1"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version == '3.8.*'",
-]
-dependencies = [
-    { name = "importlib-resources", version = "6.4.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
-    { name = "numpy", version = "1.24.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
-    { name = "packaging", version = "25.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/9d/d2/da723207ba389c9d6b6d55f21dbbba8d24c08f846c42832a69d8fdbb97da/nibabel-5.2.1.tar.gz", hash = "sha256:b6c80b2e728e4bc2b65f1142d9b8d2287a9102a8bf8477e115ef0d8334559975", size = 4503320, upload-time = "2024-02-27T04:13:19.595Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/77/3f/ce43b8c2ccc4a7913a87c4d425aaf0080ea3abf947587e47dc2025981a17/nibabel-5.2.1-py3-none-any.whl", hash = "sha256:2cbbc22985f7f9d39d050df47249771dfb8d48447f5e7a993177e4cabfe047f0", size = 3296610, upload-time = "2024-02-27T04:13:17.097Z" },
-]
-
-[[package]]
-name = "nibabel"
-version = "5.3.2"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.10'",
-    "python_full_version == '3.9.*'",
-]
-dependencies = [
-    { name = "importlib-resources", version = "6.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9' and python_full_version < '3.12'" },
-    { name = "numpy", version = "2.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.9.*'" },
-    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "packaging", version = "25.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
-    { name = "typing-extensions", version = "4.13.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9' and python_full_version < '3.13'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d9/61/33036cb89f1ec1fedbc4039602345d830b27cbd8a5c7bf28c2e5b5de3ea2/nibabel-5.3.2.tar.gz", hash = "sha256:0bdca6503b1c784b446c745a4542367de7756cfba0d72143b91f9ffb78be569b", size = 4504842, upload-time = "2024-10-23T14:19:55.866Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/43/b2/dc384197be44e2a640bb43311850e23c2c30f3b82ce7c8cdabbf0e53045e/nibabel-5.3.2-py3-none-any.whl", hash = "sha256:52970a5a8a53b1b55249cba4d9bcfaa8cc57e3e5af35a29d7352237e8680a6f8", size = 3293839, upload-time = "2024-10-23T14:19:52.65Z" },
 ]
 
 [[package]]
@@ -1561,6 +1474,29 @@ wheels = [
 ]
 
 [[package]]
+name = "simpleitk"
+version = "2.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/80/65/67069b823abce4ed0c6e1378d57634eb10b4050987d926bd4d8c070db2cf/simpleitk-2.5.0.tar.gz", hash = "sha256:222546fc8ddef6a9e2cfae95253bfc4b77f7b574dfd292194f221685bd5a2ae0", size = 2104838, upload-time = "2025-04-29T20:55:35.283Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/58/38/4b5f8f839626247d44189b106db69a7ff186acbfc500d20fd8b343b75e1f/simpleitk-2.5.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:3e53bdc12949b34edf6be1526bc63d6a0b81930ffb7430d77cff427052df04e8", size = 44587628, upload-time = "2025-04-28T16:32:07.904Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/a4/9293f73324b37e81d354231cfe41d1d52e754e631ecd945e3a74b92f5f0a/simpleitk-2.5.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:d34ada59c6944a53e581a7bebe97980c1401f3a5ad86cf67dd96d26e70d152a2", size = 38486498, upload-time = "2025-04-28T16:32:12.614Z" },
+    { url = "https://files.pythonhosted.org/packages/29/22/5492b15cb11d9261265896f9e33dce719a7e747f63a8da7024952ba891ad/simpleitk-2.5.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e854b76ddd4d77b3b57cf5d8d5d5ddcbe49f147a0108cd22391766d108b3203f", size = 47964609, upload-time = "2025-04-28T16:32:18.107Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/28/31eddbff54285b095d0c86e40691436db4ba9480c5f66232bd382bf25409/simpleitk-2.5.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f090a4ece132d6b83613c91b6631a1dc7d7530232092231cac5dec2f3e52b35d", size = 52628238, upload-time = "2025-04-28T16:32:23.527Z" },
+    { url = "https://files.pythonhosted.org/packages/54/2b/e2fa9e0f7c403cd5c25af04bfec781cd6a51c67aa832f7350552bed0ca4b/simpleitk-2.5.0-cp310-cp310-win_amd64.whl", hash = "sha256:093020866c2486ae208663ed057f7535616c97e9478e04a7ce53924fa7613195", size = 18766330, upload-time = "2025-04-28T16:32:27.276Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/d6/d4b325f4d382d8d299885b90ea32062ebbdada572adc96878fd151adbdbb/simpleitk-2.5.0-cp311-abi3-macosx_10_9_x86_64.whl", hash = "sha256:c4039e136fa7aee3367c0c3380721ae423ed99995ee7d1a16cbba8ca1f741589", size = 44619461, upload-time = "2025-04-28T16:32:32.153Z" },
+    { url = "https://files.pythonhosted.org/packages/27/ba/3881b5a09e131de47fc4ddf8878dba162aaf53d334c428a5b24c6fd730db/simpleitk-2.5.0-cp311-abi3-macosx_11_0_arm64.whl", hash = "sha256:9039e1bc7988594ef73cfa911925eee1a647d1ced81613565607bc56b16a7fbc", size = 38512619, upload-time = "2025-04-28T16:32:36.743Z" },
+    { url = "https://files.pythonhosted.org/packages/9d/62/99035b48c5fdfd3be1eda78e397c35311d45cfc839aeb9d87c1427405e3e/simpleitk-2.5.0-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2a96296e33661a8911d4f73d14a8d26eed387beb681327706bbe7e4a53893d48", size = 47944744, upload-time = "2025-04-28T16:32:41.665Z" },
+    { url = "https://files.pythonhosted.org/packages/68/e8/2c095851d76de64c2e0ec6f7ed0eed162001cf0481586354ae8d156a7f89/simpleitk-2.5.0-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e5bb0e50e9fa5e3102d8bd7f243376743592bc25ecdd5aa738f63e6bfb11dd76", size = 52625824, upload-time = "2025-04-28T16:32:47.828Z" },
+    { url = "https://files.pythonhosted.org/packages/27/25/d8a5b042cd66881b40fd680239bfbca5f9199aa509687471cf713c1ab8bb/simpleitk-2.5.0-cp311-abi3-win_amd64.whl", hash = "sha256:348ee9ae6b81ea9173701f726308ac2dac2ff22dcae7afdbdf67d037c0bd431f", size = 18810175, upload-time = "2025-04-28T16:32:53.241Z" },
+    { url = "https://files.pythonhosted.org/packages/f0/a7/35050122ed4c54f79fb97d39506507dec0615dce218d1d1435331c04ea30/simpleitk-2.5.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:db6d28785de2a97f3bc71fdecb6ef65894f7378c63c64e1791085b30d127a222", size = 44587606, upload-time = "2025-04-28T16:32:57.974Z" },
+    { url = "https://files.pythonhosted.org/packages/42/8e/29d56657e7b0c1e4fdf54df51d97bc4230b444bf4675bf10961573c86780/simpleitk-2.5.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:e1660d054d01d2b422f05b36b0d1c8c3d458ee5c86d7833169c73b791951b1c5", size = 38486355, upload-time = "2025-04-28T16:33:04.801Z" },
+    { url = "https://files.pythonhosted.org/packages/22/6e/61299f53bc16406ff1b6aa6cf22404e876281fc1bd400ab82b2e3f15d748/simpleitk-2.5.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c73dbd1786042ad2667004bc3e24e847cdec11e23ee0635f438cafcb98dc0e5a", size = 47966024, upload-time = "2025-04-28T16:33:10.175Z" },
+    { url = "https://files.pythonhosted.org/packages/ee/e3/6a6ca88e72cb48e2a5c2c8a6ac8cda107f71409fb915880f68908eb3bb93/simpleitk-2.5.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:80ac24ced63a6e66fc14b988f74a31a1472918aca2aa8901b285bd6f4788003d", size = 52613608, upload-time = "2025-04-28T16:33:15.784Z" },
+    { url = "https://files.pythonhosted.org/packages/26/a3/1297b09ca41a075bd274e11af2fa725a654fb7469cf6b926c3a9a8c9d436/simpleitk-2.5.0-cp39-cp39-win_amd64.whl", hash = "sha256:0883784ea6a01985adec39847a73a2acee0fc985ab0300ae4d4b85ea753b06ef", size = 18765675, upload-time = "2025-04-28T16:33:19.893Z" },
+]
+
+[[package]]
 name = "six"
 version = "1.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1749,16 +1685,4 @@ resolution-markers = [
 sdist = { url = "https://files.pythonhosted.org/packages/54/bf/5c0000c44ebc80123ecbdddba1f5dcd94a5ada602a9c225d84b5aaa55e86/zipp-3.20.2.tar.gz", hash = "sha256:bc9eb26f4506fda01b81bcde0ca78103b6e62f991b381fec825435c836edbc29", size = 24199, upload-time = "2024-09-13T13:44:16.101Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/8b/5ba542fa83c90e09eac972fc9baca7a88e7e7ca4b221a89251954019308b/zipp-3.20.2-py3-none-any.whl", hash = "sha256:a817ac80d6cf4b23bf7f2828b7cabf326f15a001bea8b1f9b49631780ba28350", size = 9200, upload-time = "2024-09-13T13:44:14.38Z" },
-]
-
-[[package]]
-name = "zipp"
-version = "3.21.0"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version == '3.9.*'",
-]
-sdist = { url = "https://files.pythonhosted.org/packages/3f/50/bad581df71744867e9468ebd0bcd6505de3b275e06f202c2cb016e3ff56f/zipp-3.21.0.tar.gz", hash = "sha256:2c9958f6430a2040341a52eb608ed6dd93ef4392e02ffe219417c1b28b5dd1f4", size = 24545, upload-time = "2024-11-10T15:05:20.202Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/1a/7e4798e9339adc931158c9d69ecc34f5e6791489d469f5e50ec15e35f458/zipp-3.21.0-py3-none-any.whl", hash = "sha256:ac1bbe05fd2991f160ebce24ffbac5f6d11d83dc90891255885223d42b3cd931", size = 9630, upload-time = "2024-11-10T15:05:19.275Z" },
 ]
